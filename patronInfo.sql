@@ -11,4 +11,3 @@ VALUES
 ('Bella', 'Evans','2002-06-22', 'bella.evans@example.com'),
 ('Aiden', 'Carter', '2001-01-15', 'aiden.carter@example.com');
 
-SELECT * FROM Patrons;
