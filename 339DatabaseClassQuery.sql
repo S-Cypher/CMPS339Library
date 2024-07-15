@@ -11,6 +11,31 @@ CREATE TABLE Patrons (
 	Email VARCHAR(120) NOT NULL,
 );
 
+CREATE TABLE Authors (
+	Id INT PRIMARY KEY IDENTITY,
+	FirstName VARCHAR(40) NOT NULL,
+	LastName VARCHAR(40) NOT NULL,
+);
+
+CREATE TABLE Books (
+	Id INT PRIMARY KEY IDENTITY,
+	Title VARCHAR(120) NOT NULL,
+	AuthorId INT FOREIGN KEY REFERENCES Authors NOT NULL,
+	PublishingYear INT NOT NULL,
+	ISBN BIGINT UNIQUE NOT NULL,
+	AvailableCopies int NOT NULL,
+	GenreId INT FOREIGN KEY REFERENCES Genres NOT NULL
+);
+
+CREATE TABLE Loans (
+	Id INT PRIMARY KEY IDENTITY,
+	BookId INT FOREIGN KEY REFERENCES Books NOT NULL,
+	PatronId INT FOREIGN KEY REFERENCES Patrons NOT NULL,
+	CheckoutDate DATE NOT NULL,
+	DueDate DATE NOT NULL,
+	ReturnDate DATE NOT NULL
+);
+
 INSERT INTO Patrons (FirstName, LastName, DateOfBirth, Email)
 VALUES 
 ('Patricia', 'White', '1995-08-30', 'patricia.white@example.com'),
@@ -42,16 +67,8 @@ Values ('Contemporary'),
 ('Dystopian'),
 ('Memoir');
 
-UPDATE Genres SET GenreName = 'Historical' WHERE GenreName = 'Historical Fiction';
-
 INSERT INTO Patrons (FirstName, LastName, DateOfBirth, Email)
 VALUES ('Keira', 'Stewart', '2004-05-25', 'keira.stewart@example.com');
-
-CREATE TABLE Authors (
-	Id INT PRIMARY KEY IDENTITY,
-	FirstName VARCHAR(40) NOT NULL,
-	LastName VARCHAR(40) NOT NULL,
-);
 
 INSERT INTO Authors (FirstName, LastName)
 VALUES 
@@ -65,16 +82,6 @@ VALUES
 ('Gabriel', 'Bradford'),
 ('Luke', 'White'),
 ('Peyton', 'Perry');
-
-CREATE TABLE Books (
-	Id INT PRIMARY KEY IDENTITY,
-	Title VARCHAR(120) NOT NULL,
-	AuthorId INT FOREIGN KEY REFERENCES Authors NOT NULL,
-	PublishingYear INT NOT NULL,
-	ISBN BIGINT UNIQUE NOT NULL,
-	AvailableCopies int NOT NULL,
-	GenreId INT FOREIGN KEY REFERENCES Genres NOT NULL
-);
 
 INSERT INTO Books
 (Title, AuthorId, PublishingYear, ISBN, AvailableCopies, GenreId)
@@ -91,15 +98,22 @@ INSERT INTO Books
 VALUES
 	('Cool Old Book', 2, 1990, 109876543212345, 0, 1);
 
-
-UPDATE Books
-SET Title = 'Uncool Old Book' 
-WHERE Title = 'Cool Old Book';
-
 INSERT INTO Authors 
 (FirstName, LastName)
 VALUES
 ('Generic', 'Name');
+
+INSERT INTO Loans
+	(BookId, PatronId, CheckoutDate, DueDate, ReturnDate)
+VALUES
+	(1, 1, '2024-08-18', '2024-08-30', '2024-08-28'),
+	(2, 2, '2023-11-01', '2023-11-10', '2023-11-11');
+
+UPDATE Genres SET GenreName = 'Historical' WHERE GenreName = 'Historical Fiction';
+
+UPDATE Books
+SET Title = 'Uncool Old Book' 
+WHERE Title = 'Cool Old Book';
 
 UPDATE Authors
 SET FirstName = 'Cone' 
@@ -108,19 +122,12 @@ WHERE FirstName = 'Cohen';
 UPDATE Genres SET GenreName = 'Historical' WHERE GenreName = 'Historical Fiction';
 
 
-CREATE TABLE Loans (
-	Id INT PRIMARY KEY IDENTITY,
-	BookId INT FOREIGN KEY REFERENCES Books NOT NULL,
-	PatronId INT FOREIGN KEY REFERENCES Patrons NOT NULL,
-	CheckoutDate DATE NOT NULL,
-	DueDate DATE NOT NULL,
-	ReturnDate DATE NOT NULL
-);
+SELECT * FROM Authors;
 
-INSERT INTO Loans
-	(BookId, PatronId, CheckoutDate, DueDate, ReturnDate)
-VALUES
-	(1, 1, '2024-08-18', '2024-08-30', '2024-08-28'),
-	(2, 2, '2023-11-01', '2023-11-10', '2023-11-11');
+SELECT * FROM Books;
 
+SELECT * FROM Genres;
 
+SELECT * FROM Patrons;
+
+SELECT * FROM Loans;
